@@ -12,8 +12,14 @@ mongo = PyMongo(app)
 
 @app.route("/")
 @app.route("/get_tasks")
-def get_tasks():
-    return render_template("tasks.html", tasks=mongo.db.tasks.find())
+@app.route("/get_tasks_by_category/<category_name>")
+def get_tasks(category_name=None):
+    if category_name:
+        tasks=mongo.db.tasks.find({"category_name": category_name})
+    else:
+        tasks=mongo.db.tasks.find()
+        
+    return render_template("tasks.html", tasks=tasks)
 
 
 @app.route("/add_task")
@@ -56,26 +62,10 @@ def get_categories():
     categories=mongo.db.categories.find())
     
 
-@app.route('/edit_category/<category_id>')
-def edit_category(category_id):
-    return render_template('editcategory.html',
-    category=mongo.db.categories.find_one({'_id': ObjectId(category_id)}))
+@app.route('/new_category')
+def new_category():
+    return render_template('addcategory.html')
 
-
-@app.route('/update_category/<category_id>', methods=['POST'])
-def update_category(category_id):
-    mongo.db.categories.update(
-        {'_id': ObjectId(category_id)},
-        {'category_name': request.form['category_name']})
-    return redirect(url_for('get_categories'))
-
-  
-
-@app.route('/delete_category/<category_id>')  
-def delete_category(category_id):
-    mongo.db.categories.remove({'_id': ObjectId(category_id)})
-    return redirect(url_for("get_categories"))
-    
 
 @app.route('/insert_category', methods=['POST'])
 def insert_category():
@@ -85,9 +75,26 @@ def insert_category():
     return redirect(url_for('get_categories'))
     
 
-@app.route('/new_category')
-def new_category():
-    return render_template('addcategory.html')
+@app.route('/edit_category/<category_id>')
+def edit_category(category_id):
+    return render_template('editcategory.html',
+    category=mongo.db.categories.find_one({'_id': ObjectId(category_id)}))
+
+@app.route('/update_category/<category_id>', methods=['POST'])
+def update_category(category_id):
+    mongo.db.categories.update(
+        {'_id': ObjectId(category_id)},
+        {'category_name': request.form['category_name']})
+    return redirect(url_for('get_categories'))
+
+  
+@app.route('/delete_category/<category_id>')  
+def delete_category(category_id):
+    mongo.db.categories.remove({'_id': ObjectId(category_id)})
+    return redirect(url_for("get_categories"))
+    
+
+
 
 
 if __name__ == "__main__":
