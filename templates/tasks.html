@@ -17,7 +17,11 @@
                     <a href="{{url_for('edit_task', task_id=task._id)}}" class="waves-effect waves-light btn btn_small blue">Edit</a>
                     
                 </div>
-                <div class=" task_header col s9">
+                    {% if task.is_urgent %}
+                        <div class=" task_header col s9 urgent_task">
+                    {% else %}
+                        <div class=" task_header col s9">
+                    {% endif %}
                     <strong>{{task.task_name}}</strong> - {{task.due_date}}
                 </div>
             </div>

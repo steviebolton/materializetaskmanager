@@ -13,3 +13,8 @@
 .task_header {
     margin-top: 5px;
 }
+
+
+.urgent_task {
+    color: red;
+}

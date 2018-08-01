@@ -30,16 +30,15 @@ def add_task():
 
 @app.route("/insert_task", methods=['POST'])
 def insert_task():
-    tasks = mongo.db.tasks
-    tasks.insert_one(request.form.to_dict())
+    mongo.db.tasks.insert_one(request.form.to_dict())
     return redirect(url_for("get_tasks"))
 
     
 @app.route("/edit_task/<task_id>")
 def edit_task(task_id):
     the_task = mongo.db.tasks.find_one({"_id": ObjectId(task_id)})
-    all_categories = mongo.db.categories.find()
-    return render_template("edittask.html", task=the_task, categories=all_categories)
+    categories = mongo.db.categories.find()
+    return render_template("edittask.html", task=the_task, categories=categories)
 
 
 @app.route("/update_task/<task_id>", methods=['POST'])
@@ -70,8 +69,7 @@ def new_category():
 @app.route('/insert_category', methods=['POST'])
 def insert_category():
     categories = mongo.db.categories
-    category_doc = {'category_name': request.form['category_name']}
-    categories.insert_one(category_doc)
+    categories.insert_one(request.form.to_dict())
     return redirect(url_for('get_categories'))
     
 
