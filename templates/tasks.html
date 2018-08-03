@@ -13,7 +13,8 @@
             <div class="collapsible-header">
                 <div class="col s3">
                     <i class="material-icons">expand_more</i>
-                    <a href="{{url_for('delete_task', task_id=task._id)}}" class="waves-effect waves-light btn btn_small">Done</a>
+                    <!--<a id="get-data-id" class="get-task-id-class waves-effect waves-light btn modal-trigger btn-small blue" href="#modal1" data-taskid={{task._id}}>Done</a>-->
+                    <a href="#modal1" class="delete_task_btn waves-effect waves-light btn btn_small modal-trigger" data-taskid={{task._id}}>Done</a>
                     <a href="{{url_for('edit_task', task_id=task._id)}}" class="waves-effect waves-light btn btn_small blue">Edit</a>
                     
                 </div>
@@ -34,5 +35,29 @@
         {% endfor %}
 
     </ul>
+    
+    
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal center-align">
+        <div class="modal-content">
+            <h4>Are you sure?</h4>
+        </div>
+    
+        <div class="row modal-footer">
+            <form action="{{ url_for('delete_task') }}" method="POST" class="col s6 center-align">
+                <input id="hidden-task-id" type="hidden" name="task_id">
+                <button class="testing btn waves-effect waves-light margin-left" type="submit" name="action">Yes
+                    <i class="material-icons right">thumb_up</i>
+                </button>
+            </form>
+    
+            <form action="{{ url_for('get_tasks') }}" method="GET" class="col s6 center-align">
+                <button class="btn waves-effect waves-light margin-left" type="submit" name="action">No
+                    <i class="material-icons right">thumb_down</i>
+                </button>
+            </form>
+        </div>
+    </div>
+           
 </div>
 {% endblock %}
